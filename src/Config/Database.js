@@ -8,10 +8,11 @@ const mongoClient = new MongoClient(process.env.DATABASE_URL)
 let db;
 
 try {
-  await mongoClient.connect()
-  db = mongoClient.db()
+  await mongoClient.connect();
+  db = mongoClient.db();
 } catch (error) {
-  console.log('Deu errro no server')
+  console.log("Erro no servidor");
+  console.log(error)
 }
 
-export default db
+export default db;

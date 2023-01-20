@@ -9,9 +9,11 @@ server.use(express.json());
 server.use(cors());
 const PORT = 5000;
 
+server.use(authRouter);
+
 // Server Response ------------------------------------------------------------------------//
 
-server.listen(PORT, () => `Server is listening on port ${PORT}`);
+server.listen(PORT, () => console.log(`Server is listening on port ${PORT}`));
 
 
 
