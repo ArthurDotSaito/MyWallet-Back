@@ -21,7 +21,7 @@ export async function signUp(req, res) {
         const checkExistingEmail = await db.collection("users").findOne({email: user.email});
         if(checkExistingEmail) return res.status(400).send("Usuário já cadastrado!");
         console.log("Tentei cadastrar!")
-        await db.collection("usuarios").insertOne({ ...user, password: passwordHashed })
+        await db.collection("users").insertOne({ ...user, password: passwordHashed })
         res.status(201).send("Usuário cadastrado com sucesso!")
         console.log("Cadastrado!")
     } catch (error) {
@@ -38,6 +38,7 @@ export async function signIn(req, res) {
     return res.status(422).send(error);
     console.log("erro ao fazer login!");
   }
+
   try {
     const checkUserLogin = await db.collection('users').findOne({ email:userData.email })
     if (!checkUserLogin) return res.status(403).send("Usuário ou senha incorretos")
@@ -47,10 +48,10 @@ export async function signIn(req, res) {
 
     const token = uuidV4();
 
-    const sessionUserData = {userId: user_id, token}
+    const sessionUserData = {userId: checkUserLogin._id, token}
     await db.collection("sessions").insertOne({ sessionUserData })
-
-    return res.status(200).send({token, name: user.name})
+    console.log("Tentei Logar!");
+    return res.status(200).send({token, name: checkUserLogin.name})
 
   }catch (error) {
     res.status(500).send(error.message);
