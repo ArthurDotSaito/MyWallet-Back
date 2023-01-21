@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidV4 } from "uuid";
 import db from '../Config/Database.js'
-import { userRegisterSchema } from "../Model/UsuarioSchema.js";
+import { userLoginSchema, userRegisterSchema } from "../Model/UsuarioSchema.js";
 
 // Cadastro de Usuários -----------------------------------------------------------------------------------------------------------//
 
@@ -29,3 +29,31 @@ export async function signUp(req, res) {
     }
   }
   
+// Login de Usuário -----------------------------------------------------------------------------------------------------------------//
+
+export async function signIn(req, res) {
+  const user = req.body
+  const {value: userData, error } = userLoginSchema.validate(user, { abortEarly: false });
+  if(error){
+    return res.status(422).send(error);
+    console.log("erro ao fazer login!");
+  }
+  try {
+    const checkUserLogin = await db.collection('users').findOne({ email:userData.email })
+    if (!checkUserLogin) return res.status(403).send("Usuário ou senha incorretos")
+
+    const isCorrectPassword = bcrypt.compareSync(userData.password, checkUserLogin.password)
+    if (!isCorrectPassword) return res.status(403).send("Usuário ou senha incorretos")
+
+    const token = uuidV4();
+
+    const sessionUserData = {userId: user_id, token}
+    await db.collection("sessions").insertOne({ sessionUserData })
+
+    return res.status(200).send({token, name: user.name})
+
+  }catch (error) {
+    res.status(500).send(error.message);
+    console.log("Erro ao validar o Login!")
+  }
+}
