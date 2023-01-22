@@ -62,6 +62,7 @@ export async function signIn(req, res) {
       await db.collection("sessions").insertOne(newSession)
     } */
     const sessionData = {userId: checkUserLogin._id, token}
+    console.log("SESSION DATA")
     console.log(sessionData)
     await db.collection("sessions").insertOne(sessionData)
 
