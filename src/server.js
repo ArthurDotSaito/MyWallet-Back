@@ -8,8 +8,8 @@ import walletRouter from './Routes/WalletRoutes.js';
 const server = express();
 server.use(express.json());
 server.use(cors());
-const PORT = 5000;
 
+const PORT = process.env.PORT || 5000;
 server.use([authRouter, walletRouter]);
 
 // Server Response ------------------------------------------------------------------------//

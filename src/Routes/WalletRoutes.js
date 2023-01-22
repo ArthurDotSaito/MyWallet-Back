@@ -1,5 +1,6 @@
 import express, { Router } from "express";
-import { getWallet, postWallet } from "../controller/Wallet.js";
+import { getWallet } from "../controller/GetWallet.js";
+import { postWallet } from "../controller/PostWallet.js";
 
 const walletRouter = express.Router();
 
