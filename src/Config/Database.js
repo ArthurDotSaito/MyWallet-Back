@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 // Database Configuration -----------------------------------------------------------------------//
 dotenv.config()
 
-const mongoClient = new MongoClient(process.env.DATABASE_URL)
+const mongoClient = new MongoClient(process.env.MONGO_URI)
 let db;
 
 try {
